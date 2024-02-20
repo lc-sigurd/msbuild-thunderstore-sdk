@@ -1,0 +1,109 @@
+<!--
+Copyright (c) 2024 Sigurd Team
+The Sigurd Team licenses this file to you under the LGPL-3.0-OR-LATER license.
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="Sdk.tasks" Condition="$(MSBuildProjectName) != 'MSBuildTasks'"/>
+
+    <Target Name="SetPackageVersionEvent" DependsOnTargets="@(SetPackageVersionTargetName)" />
+
+    <!-- https://github.com/BepInEx/BepInEx.Templates/blob/9d628c67de0a84337f38f755eeb6646696ae8423/BepInEx.PluginInfoProps/BepInEx.PluginInfoProps.props -->
+    <!-- BepInEx.PluginInfoProps Copyright (c) 2021 BepInEx -->
+    <Target
+        Name="GenerateMyPluginInfo"
+        BeforeTargets="BeforeCompile;CoreCompile"
+        DependsOnTargets="SetPackageVersionEvent"
+        Condition="$(HasBepInPlugin) == 'true'"
+        Inputs="$(MSBuildAllProjects)"
+        Outputs="$(IntermediateOutputPath)MyPluginInfo.cs"
+    >
+        <PropertyGroup>
+            <GeneratedText><![CDATA[
+namespace $(RootNamespace)%3B
+
+#pragma warning disable 1591
+internal static class MyPluginInfo
+{
+    public const string PLUGIN_GUID = "$(AssemblyName)"%3B
+    public const string PLUGIN_NAME = "$(Product)"%3B
+    public const string PLUGIN_VERSION = "$(ThunderstoreVersion)"%3B
+}
+#pragma warning restore 1591
+
+      ]]></GeneratedText>
+            <GeneratedFilePath>$(IntermediateOutputPath)MyPluginInfo.cs</GeneratedFilePath>
+        </PropertyGroup>
+        <ItemGroup>
+            <Compile Include="$(GeneratedFilePath)" />
+            <FileWrites Include="$(GeneratedFilePath)" />
+        </ItemGroup>
+        <WriteLinesToFile Lines="$(GeneratedText)" File="$(GeneratedFilePath)" WriteOnlyWhenDifferent="true" Overwrite="true" />
+    </Target>
+
+    <Target
+        Name="GenThunderstoreMetadata"
+        DependsOnTargets="SetPackageVersionEvent"
+        Condition="$(IsThunderstorePackable)"
+        Outputs="$(_ConfigurationFileOutputPath)"
+    >
+        <PropertyGroup>
+            <_ConfigurationFileOutputPath>$(ProjectDir)assets/thunderstore.toml.user</_ConfigurationFileOutputPath>
+        </PropertyGroup>
+
+        <GenThunderstoreMetadata
+            ConfigurationFileOutputPath="$(_ConfigurationFileOutputPath)"
+            PackageNamespace="$(ThunderstoreNamespace)"
+            PackageName="$(ThunderstoreName)"
+            PackageWebsiteUrl="$(ThunderstoreWebsiteUrl)"
+            PackageVersion="$(PlainVersion)"
+            PackageDescription="$(ThunderstoreDescription)"
+            PackageContainsNsfwContent="false"
+            PackageDependencies="@(ThunderstoreDependency)"
+            BuildReadmePath="$(ThunderstoreReadmePath)"
+            BuildIconPath="$(ThunderstoreIconPath)"
+            BuildOutDir="$(ThunderstoreOutDir)"
+            BuildCopyPaths="@(ThunderstoreBuildCopyPath)"
+            PublishCommunities="@(ThunderstorePublishCommunity)"
+        />
+    </Target>
+
+    <PropertyGroup>
+        <ShouldThunderstorePackThisBuild>false</ShouldThunderstorePackThisBuild>
+        <ShouldThunderstorePackThisBuild Condition="$(TargetFramework) == 'netstandard2.1' and $(IsThunderstorePackable)">true</ShouldThunderstorePackThisBuild>
+    </PropertyGroup>
+
+    <!-- Implicit behaviour - this will only execute if ThunderstorePack does -->
+    <Target Name="PreThunderstorePackEvent" DependsOnTargets="@(PreThunderstorePackTargetName)"/>
+
+    <Target
+        Name="ThunderstorePack"
+        DependsOnTargets="PreThunderstorePackEvent"
+        AfterTargets="PostBuildEvent"
+        Condition="$(ShouldThunderstorePackThisBuild)"
+    >
+        <MakeDir Directories="$(ProjectDir)assets/bundles" Condition="!Exists('$(ProjectDir)assets/bundles')"/>
+        <Exec Command="dotnet tcli build --config-path $(ProjectDir)assets/thunderstore.toml.user --package-version $(PlainVersion)"/>
+        <ItemGroup>
+            <FilesToRename Include="$(ThunderstoreOutDir)*-$(PlainVersion).zip"/>
+        </ItemGroup>
+        <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(MinVerVersion)))"/>
+    </Target>
+
+    <Target Name="PostThunderstorePackEvent"
+            AfterTargets="ThunderstorePack"
+            DependsOnTargets="@(PostThunderstorePackTargetName)"
+            Condition="$(ShouldThunderstorePackThisBuild)"
+    />
+
+    <Target Name="CopyToTestProfile">
+        <ItemGroup>
+            <StageThunderstorePackageList Include="$(ThunderstoreOutDir)*-$(MinVerVersion).zip" />
+        </ItemGroup>
+        <StageThunderstorePackage Packages="@(StageThunderstorePackageList)" StagingProfilePath="$$(TestProfileDir)" />
+    </Target>
+
+    <Target Name="ThunderstorePublish" DependsOnTargets="SetPackageVersionEvent" Condition="$(IsThunderstorePackable)">
+        <Exec Command="dotnet tcli publish --config-path $(ProjectDir)assets/thunderstore.toml.user --file $(ThunderstoreOutDir)*-$(MinVerVersion).zip"/>
+    </Target>
+</Project>

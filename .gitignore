@@ -1,0 +1,51 @@
+# Exclude everything
+/*
+
+# Specific includes
+
+## Editorconfig
+!.editorconfig
+
+## Build System/Scripts
+!/.config
+!/global.json
+!NuGet.Config
+!Directory.Build.props
+!Directory.Build.targets
+!build.sh
+!build.ps1
+!build.cmd
+
+## Markdowns
+!*.md
+!LICENSE
+
+## important Git files
+!.gitmodules
+!.gitignore
+!.gitattributes
+!.git-blame-ignore-revs
+
+## GitHub specific
+!.github/
+
+## Libraries
+!/libs
+
+## Solution
+!SigurdLib.sln
+
+### SDK Project
+!/Sigurd.Thunderstore.Sdk
+/Sigurd.Thunderstore.Sdk/[Bb]in
+/Sigurd.Thunderstore.Sdk/[Oo]bj
+/Sigurd.Thunderstore.Sdk/[Dd]ist
+
+### SDK.Tasks Project
+!/Sigurd.Thunderstore.Sdk.Tasks
+/Sigurd.Thunderstore.Sdk.Tasks/[Bb]in
+/Sigurd.Thunderstore.Sdk.Tasks/[Oo]bj
+
+# Explicit exceptions/ignores
+**.user
+!**.template.*.user

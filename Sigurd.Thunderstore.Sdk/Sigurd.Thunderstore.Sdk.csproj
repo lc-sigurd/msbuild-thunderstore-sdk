@@ -1,0 +1,23 @@
+﻿<!--
+Copyright (c) 2024 Sigurd Team
+The Sigurd Team licenses this file to you under the LGPL-3.0-OR-LATER license.
+-->
+
+<Project Sdk="Microsoft.Build.NoTargets" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <DevelopmentDependency>true</DevelopmentDependency>
+
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Content Include="$(ProjectDir)Sdk/*" Pack="true" PackagePath="Sdk/" />
+        <Content Include="$(ProjectDir)../Sigurd.Thunderstore.Sdk.Tasks/bin/ReleaseTasks/**/*.dll"
+                 Pack="true"
+                 PackagePath="build/"
+        />
+    </ItemGroup>
+
+</Project>

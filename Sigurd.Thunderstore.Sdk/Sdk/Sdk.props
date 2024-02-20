@@ -1,0 +1,42 @@
+<!--
+Copyright (c) 2024 Sigurd Team
+The Sigurd Team licenses this file to you under the LGPL-3.0-OR-LATER license.
+-->
+
+<Project InitialTargets="InitializeProps" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <!-- Thunderstore metadata -->
+    <ItemDefinitionGroup>
+        <ThunderstoreDependency>
+            <Version/>
+            <Reference>true</Reference>
+        </ThunderstoreDependency>
+        <ThunderstoreBuildCopyPath>
+            <Destination/>
+        </ThunderstoreBuildCopyPath>
+        <ThunderstorePublishCommunity>
+            <CategorySlugs/>
+        </ThunderstorePublishCommunity>
+    </ItemDefinitionGroup>
+
+    <Target Name="SetThunderstoreOutDir" BeforeTargets="InitializeProps" Condition="$(IsThunderstorePackable)">
+        <PropertyGroup>
+            <ThunderstoreOutDir>$(TargetDir)dist/</ThunderstoreOutDir>
+        </PropertyGroup>
+    </Target>
+
+    <PropertyGroup>
+        <IsThunderstorePackable>false</IsThunderstorePackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PostThunderstorePackTargetName Include="CopyToTestProfile"/>
+    </ItemGroup>
+
+    <!-- MinVer compatibility -->
+    <ItemGroup Condition="">
+
+    </ItemGroup>
+
+    <!-- Dummy target to execute 'initially' -->
+    <Target Name="InitializeProps" />
+</Project>

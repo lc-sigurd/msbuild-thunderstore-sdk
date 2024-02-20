@@ -1,0 +1,15 @@
+<!--
+Copyright (c) 2024 Sigurd Team
+The Sigurd Team licenses this file to you under the LGPL-3.0-OR-LATER license.
+-->
+
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup Condition=" '$(MSBuildTasksAssembly)' == '' ">
+        <MSBuildTasksAssemblyDir Condition=" '$(MSBuildTasksAssemblyDir)' == '' ">../build/</MSBuildTasksAssemblyDir>
+        <MSBuildTasksAssembly Condition=" '$(MSBuildRuntimeType)' == 'Core' ">$(MSBuildTasksAssemblyDir)net8.0/MSBuildTasks.dll</MSBuildTasksAssembly>
+        <MSBuildTasksAssembly Condition=" '$(MSBuildRuntimeType)' != 'Core' ">$(MSBuildTasksAssemblyDir)net472/MSBuildTasks.dll</MSBuildTasksAssembly>
+    </PropertyGroup>
+
+    <UsingTask TaskName="Sigurd.Thunderstore.Sdk.Tasks.GenThunderstoreMetadata.Task" AssemblyFile="$(MSBuildTasksAssembly)" />
+    <UsingTask TaskName="Sigurd.Thunderstore.Sdk.Tasks.StageThunderstorePackage.Task" AssemblyFile="$(MSBuildTasksAssembly)" />
+</Project>
