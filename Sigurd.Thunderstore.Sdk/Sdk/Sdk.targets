@@ -27,7 +27,7 @@ internal static class MyPluginInfo
 {
     public const string PLUGIN_GUID = "$(AssemblyName)"%3B
     public const string PLUGIN_NAME = "$(Product)"%3B
-    public const string PLUGIN_VERSION = "$(ThunderstoreVersion)"%3B
+    public const string PLUGIN_VERSION = "$(PlainVersion)"%3B
 }
 #pragma warning restore 1591
 
@@ -87,7 +87,7 @@ internal static class MyPluginInfo
         <ItemGroup>
             <FilesToRename Include="$(ThunderstoreOutDir)*-$(PlainVersion).zip"/>
         </ItemGroup>
-        <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(MinVerVersion)))"/>
+        <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(Version)))"/>
     </Target>
 
     <Target Name="PostThunderstorePackEvent"
@@ -98,12 +98,12 @@ internal static class MyPluginInfo
 
     <Target Name="CopyToTestProfile">
         <ItemGroup>
-            <StageThunderstorePackageList Include="$(ThunderstoreOutDir)*-$(MinVerVersion).zip" />
+            <StageThunderstorePackageList Include="$(ThunderstoreOutDir)*-$(Version).zip" />
         </ItemGroup>
         <StageThunderstorePackage Packages="@(StageThunderstorePackageList)" StagingProfilePath="$$(TestProfileDir)" />
     </Target>
 
     <Target Name="ThunderstorePublish" DependsOnTargets="SetPackageVersionEvent" Condition="$(IsThunderstorePackable)">
-        <Exec Command="dotnet tcli publish --config-path $(ProjectDir)assets/thunderstore.toml.user --file $(ThunderstoreOutDir)*-$(MinVerVersion).zip"/>
+        <Exec Command="dotnet tcli publish --config-path $(ProjectDir)assets/thunderstore.toml.user --file $(ThunderstoreOutDir)*-$(Version).zip"/>
     </Target>
 </Project>
