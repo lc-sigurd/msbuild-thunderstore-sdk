@@ -96,7 +96,7 @@ internal static class MyPluginInfo
             Condition="$(ShouldThunderstorePackThisBuild)"
     />
 
-    <Target Name="CopyToTestProfile">
+    <Target Name="CopyToTestProfile" Condition="$(ShouldCopyToTestProfile)">
         <ItemGroup>
             <StageThunderstorePackageList Include="$(ThunderstoreOutDir)*-$(Version).zip" />
         </ItemGroup>
