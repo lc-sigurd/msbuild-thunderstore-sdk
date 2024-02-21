@@ -13,7 +13,7 @@ using ThunderstoreCLI.Models;
 
 namespace Sigurd.Thunderstore.Sdk.Tasks.GenThunderstoreMetadata;
 
-public sealed class Task : TaskBase
+public sealed class GenThunderstoreMetadata : TaskBase
 {
     public string ConfigurationFileSchemaVersion { get; set; } = "0.0.1";
 

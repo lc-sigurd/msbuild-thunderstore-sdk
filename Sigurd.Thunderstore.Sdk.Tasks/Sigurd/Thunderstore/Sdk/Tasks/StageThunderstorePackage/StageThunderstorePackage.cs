@@ -13,7 +13,7 @@ using Sigurd.Thunderstore.Sdk.Tasks.Extensions;
 
 namespace Sigurd.Thunderstore.Sdk.Tasks.StageThunderstorePackage;
 
-public class Task : TaskBase
+public class StageThunderstorePackage : TaskBase
 {
     [Required]
     public ITaskItem[]? Packages { get; set; }
