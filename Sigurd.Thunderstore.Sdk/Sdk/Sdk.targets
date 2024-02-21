@@ -100,7 +100,7 @@ internal static class MyPluginInfo
         <ItemGroup>
             <StageThunderstorePackageList Include="$(ThunderstoreOutDir)*-$(Version).zip" />
         </ItemGroup>
-        <StageThunderstorePackage Packages="@(StageThunderstorePackageList)" StagingProfilePath="$$(TestProfileDir)" />
+        <StageThunderstorePackage Packages="@(StageThunderstorePackageList)" StagingProfilePath="$(TestProfileDir)" />
     </Target>
 
     <Target Name="ThunderstorePublish" DependsOnTargets="SetPackageVersionEvent" Condition="$(IsThunderstorePackable)">
