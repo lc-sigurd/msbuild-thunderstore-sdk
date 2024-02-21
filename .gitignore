@@ -33,7 +33,7 @@
 !/libs
 
 ## Solution
-!SigurdLib.sln
+!Sigurd.Thunderstore.Sdk.sln
 
 ### SDK Project
 !/Sigurd.Thunderstore.Sdk

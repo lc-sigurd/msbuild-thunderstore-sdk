@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigurd.Thunderstore.Sdk", "Sigurd.Thunderstore.Sdk\Sigurd.Thunderstore.Sdk.csproj", "{184A824C-6CCD-47A1-99C5-B01F7579C366}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sigurd.Thunderstore.Sdk.Tasks", "Sigurd.Thunderstore.Sdk.Tasks\Sigurd.Thunderstore.Sdk.Tasks.csproj", "{31CBF87B-D68E-4693-BEF5-54A26F01E6DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		ReleaseTasks|Any CPU = ReleaseTasks|Any CPU
+		ReleaseSdk|Any CPU = ReleaseSdk|Any CPU
+		DebugTasks|Any CPU = DebugTasks|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{184A824C-6CCD-47A1-99C5-B01F7579C366}.ReleaseTasks|Any CPU.ActiveCfg = ReleaseTasks|Any CPU
+		{184A824C-6CCD-47A1-99C5-B01F7579C366}.ReleaseSdk|Any CPU.ActiveCfg = ReleaseSdk|Any CPU
+		{184A824C-6CCD-47A1-99C5-B01F7579C366}.ReleaseSdk|Any CPU.Build.0 = ReleaseSdk|Any CPU
+		{184A824C-6CCD-47A1-99C5-B01F7579C366}.DebugTasks|Any CPU.ActiveCfg = DebugTasks|Any CPU
+		{31CBF87B-D68E-4693-BEF5-54A26F01E6DE}.ReleaseTasks|Any CPU.ActiveCfg = ReleaseTasks|Any CPU
+		{31CBF87B-D68E-4693-BEF5-54A26F01E6DE}.ReleaseTasks|Any CPU.Build.0 = ReleaseTasks|Any CPU
+		{31CBF87B-D68E-4693-BEF5-54A26F01E6DE}.ReleaseSdk|Any CPU.ActiveCfg = ReleaseSdk|Any CPU
+		{31CBF87B-D68E-4693-BEF5-54A26F01E6DE}.DebugTasks|Any CPU.ActiveCfg = DebugTasks|Any CPU
+		{31CBF87B-D68E-4693-BEF5-54A26F01E6DE}.DebugTasks|Any CPU.Build.0 = DebugTasks|Any CPU
+	EndGlobalSection
+EndGlobal
