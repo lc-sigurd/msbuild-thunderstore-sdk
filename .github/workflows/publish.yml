@@ -1,0 +1,80 @@
+name: Publish
+
+on:
+  release:
+    types: [prereleased, released]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+          filter: tree:0
+          submodules: recursive
+
+      - name: Setup .NET environment
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.100"
+
+      - name: Restore project
+        run: |
+          dotnet restore
+          dotnet tool restore
+
+      - name: Build MSBuild tasks
+        run: |
+          dotnet build -c ReleaseTasks
+
+      - name: Pack SDK
+        run: |
+          dotnet pack -c ReleaseSdk
+
+      - name: Upload nupkg artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkg-build
+          path: ./*/bin/ReleaseSdk/*.nupkg
+
+  upload-release-artifacts:
+    name: Upload Release Artifacts
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Upload artifacts to Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release upload ${{ github.event.release.tag_name }} nupkg-build/*/bin/ReleaseSdk/*.nupkg
+
+  deploy-nuget:
+    name: Deploy to NuGet
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch Sources
+        uses: actions/checkout@v4
+
+      - name: Download nupkg artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nupkg-build
+
+      - name: Setup .NET environment
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.100"
+
+      - name: Publish to NuGet.org
+        run: |
+          dotnet nuget push ./*/bin/ReleaseSdk/*.nupkg --api-key ${{ secrets.NUGET_API_TOKEN }} --source https://api.nuget.org/v3/index.json
