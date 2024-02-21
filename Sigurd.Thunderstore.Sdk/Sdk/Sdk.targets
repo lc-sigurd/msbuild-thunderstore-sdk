@@ -27,7 +27,7 @@ internal static class MyPluginInfo
 {
     public const string PLUGIN_GUID = "$(AssemblyName)"%3B
     public const string PLUGIN_NAME = "$(Product)"%3B
-    public const string PLUGIN_VERSION = "$(PlainVersion)"%3B
+    public const string PLUGIN_VERSION = "$(PackageVersion)"%3B
 }
 #pragma warning restore 1591
 
@@ -56,7 +56,7 @@ internal static class MyPluginInfo
             PackageNamespace="$(ThunderstoreNamespace)"
             PackageName="$(ThunderstoreName)"
             PackageWebsiteUrl="$(ThunderstoreWebsiteUrl)"
-            PackageVersion="$(PlainVersion)"
+            PackageVersion="$(PackageVersion)"
             PackageDescription="$(ThunderstoreDescription)"
             PackageContainsNsfwContent="false"
             PackageDependencies="@(ThunderstoreDependency)"
@@ -83,11 +83,11 @@ internal static class MyPluginInfo
         Condition="$(ShouldThunderstorePackThisBuild)"
     >
         <MakeDir Directories="$(ProjectDir)assets/bundles" Condition="!Exists('$(ProjectDir)assets/bundles')"/>
-        <Exec Command="dotnet tcli build --config-path $(ProjectDir)assets/thunderstore.toml.user --package-version $(PlainVersion)"/>
+        <Exec Command="dotnet tcli build --config-path $(ProjectDir)assets/thunderstore.toml.user --package-version $(PackageVersion)"/>
         <ItemGroup>
-            <FilesToRename Include="$(ThunderstoreOutDir)*-$(PlainVersion).zip"/>
+            <FilesToRename Include="$(ThunderstoreOutDir)*-$(PackageVersion).zip"/>
         </ItemGroup>
-        <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(Version)))"/>
+        <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PackageVersion), $(Version)))"/>
     </Target>
 
     <Target Name="PostThunderstorePackEvent"
