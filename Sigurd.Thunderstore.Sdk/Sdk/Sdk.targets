@@ -41,9 +41,11 @@ internal static class MyPluginInfo
         <WriteLinesToFile Lines="$(GeneratedText)" File="$(GeneratedFilePath)" WriteOnlyWhenDifferent="true" Overwrite="true" />
     </Target>
 
+    <Target Name="PreThunderstoreGenEvent" DependsOnTargets="@(PreThunderstoreGenTargetName)" />
+
     <Target
         Name="GenThunderstoreMetadata"
-        DependsOnTargets="SetThunderstorePackageVersionEvent"
+        DependsOnTargets="SetThunderstorePackageVersionEvent;PreThunderstoreGenEvent"
         Condition="$(IsThunderstorePackable)"
         Outputs="$(_ConfigurationFileOutputPath)"
     >
