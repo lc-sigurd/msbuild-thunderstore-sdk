@@ -38,13 +38,13 @@ public class StageThunderstorePackage : TaskBase
     }
 
     [MemberNotNullWhen(true, nameof(_parsedStagingProfilePath))]
-    public bool ParsedStagingProfilePathIsValid => _parsedStagingProfilePath is { Exists: true } && _parsedStagingProfilePath.HasAttributes(FileAttributes.Directory);
+    public bool ParsedStagingProfilePathIsValid => _parsedStagingProfilePath is { Exists: false } || (_parsedStagingProfilePath is { Exists: true } && _parsedStagingProfilePath.HasAttributes(FileAttributes.Directory));
 
     [MemberNotNull(nameof(_parsedStagingProfilePath))]
     private void EnsureValidParsedStageProfilePath()
     {
         if (ParsedStagingProfilePathIsValid) return;
-        throw new ArgumentException("Staging profile path does not exist or is not a directory");
+        throw new ArgumentException("Staging profile path already exists & is not a directory");
     }
 
     [MemberNotNull(nameof(_parsedPackages), nameof(_parsedStagingProfilePath))]
