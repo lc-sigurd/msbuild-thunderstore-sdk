@@ -98,7 +98,7 @@ internal static class MyPluginInfo
 
     <Target Name="CopyToTestProfile" Condition="$(ShouldCopyToTestProfile)">
         <ItemGroup>
-            <StageThunderstorePackageList Include="$(ThunderstoreOutDir)*-$(Version).zip" />
+            <StageThunderstorePackageList Include="$(ThunderstoreOutDir)$(ThunderstoreNamespace)-$(ThunderstoreName)-$(Version).zip" />
         </ItemGroup>
         <StageThunderstorePackage Packages="@(StageThunderstorePackageList)" StagingProfilePath="$(TestProfileDir)" />
     </Target>
