@@ -112,7 +112,7 @@ public sealed class GenThunderstoreMetadata : TaskBase
         foreach (var item in PublishCommunities) {
             var itemCategories = item
                 .GetMetadata("CategorySlugs")
-                .Split(";")
+                .Split(';')
                 .Where(slug => !string.IsNullOrWhiteSpace(slug))
                 .ToHashSet();
             communityCategories[item.ItemSpec]
