@@ -19,26 +19,26 @@ public class PackageInstallRuleSet
     public static PackageInstallRuleSet DefaultBepInExInstallRules = new() {
         Rules = new List<PackageInstallRule> {
             new() {
-                Route = Path.Join("BepInEx", "plugins"),
+                Route = Path.Combine("BepInEx", "plugins"),
                 ImplicitFileExtensions = [".dll"],
                 TrackingMethod = TrackingMethod.Subdirectory,
                 IsDefaultLocation = true,
             },
             new() {
-                Route = Path.Join("BepInEx", "core"),
+                Route = Path.Combine("BepInEx", "core"),
                 TrackingMethod = TrackingMethod.Subdirectory
             },
             new() {
-                Route = Path.Join("BepInEx", "patchers"),
+                Route = Path.Combine("BepInEx", "patchers"),
                 TrackingMethod = TrackingMethod.Subdirectory
             },
             new() {
-                Route = Path.Join("BepInEx", "monomod"),
+                Route = Path.Combine("BepInEx", "monomod"),
                 ImplicitFileExtensions = [".mm.dll"],
                 TrackingMethod = TrackingMethod.Subdirectory
             },
             new() {
-                Route = Path.Join("BepInEx", "config"),
+                Route = Path.Combine("BepInEx", "config"),
                 TrackingMethod = TrackingMethod.None
             }
         }.AsReadOnly(),
@@ -70,7 +70,7 @@ public class PackageInstallRuleSet
         public bool IsDefaultLocation { get; init; } = false;
 
         public string GetEffectiveRoute(ThunderstorePackageArchive archive) => TrackingMethod switch {
-            TrackingMethod.Subdirectory => Path.Join(Route, archive.PackageIdentifier),
+            TrackingMethod.Subdirectory => Path.Combine(Route, archive.PackageIdentifier),
             TrackingMethod.None => Route,
             _ => throw new ArgumentOutOfRangeException()
         };
