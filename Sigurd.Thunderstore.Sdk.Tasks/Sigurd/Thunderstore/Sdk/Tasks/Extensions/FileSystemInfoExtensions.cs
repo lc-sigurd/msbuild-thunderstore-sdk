@@ -16,5 +16,5 @@ public static class FileSystemInfoExtensions
         => info.GetFullNameRelativeTo(Path.GetDirectoryName(file)!);
 
     public static string GetFullNameRelativeTo(this FileSystemInfo info, string dir)
-        => Path.GetRelativePath(dir, info.FullName);
+        => PathNetCore.GetRelativePath(dir, info.FullName);
 }
