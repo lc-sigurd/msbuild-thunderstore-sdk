@@ -6,7 +6,7 @@ The Sigurd Team licenses this file to you under the LGPL-3.0-OR-LATER license.
 <Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFrameworks>net8.0;net472</TargetFrameworks>
         <AssemblyName>com.sigurd.thunderstore.sdk.tasks</AssemblyName>
         <Product>Sigurd Thunderstore SDK Tasks</Product>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
