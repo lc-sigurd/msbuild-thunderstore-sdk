@@ -10,8 +10,11 @@ using Tomlet;
 
 namespace ThunderstoreCLI.Models;
 
-public abstract class BaseToml<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T> : ISerialize<T>
-    where T : BaseToml<T>
+#if NETFRAMEWORK
+public abstract class BaseToml<T> where T : BaseToml<T>
+#else
+public abstract class BaseToml<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] T> where T : BaseToml<T>
+#endif
 {
     public string Serialize() => TomletMain.TomlStringFrom(this);
 
