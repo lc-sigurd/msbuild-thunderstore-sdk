@@ -121,8 +121,11 @@ public sealed class GenThunderstoreMetadata : TaskBase
 
         project.Publish.Categories = new ThunderstoreProject.CategoryDictionary {
             Categories = communityCategories
-                .Select(item => (item.Key, item.Value.ToArray()))
-                .ToDictionary()
+                .Select(item => (Community: item.Key, Categories: item.Value.ToArray()))
+                .ToDictionary(
+                    item => item.Community,
+                    item => item.Categories
+                )
         };
 
         Directory.CreateDirectory(Path.GetDirectoryName(ConfigurationFileOutputPath)!);
