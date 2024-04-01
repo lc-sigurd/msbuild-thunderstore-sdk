@@ -107,7 +107,7 @@ public class ThunderstoreProject : BaseToml<ThunderstoreProject>
 
             public CopyPath MakeRelativeTo(string directory)
             {
-                Source = Path.GetRelativePath(directory, Source);
+                Source = PathNetCore.GetRelativePath(directory, Source);
                 return this;
             }
         }
