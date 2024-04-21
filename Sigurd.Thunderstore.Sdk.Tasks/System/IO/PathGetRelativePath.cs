@@ -4,7 +4,7 @@ using System.Text;
 
 namespace System.IO;
 
-public static class PathNetCore
+public static partial class PathNetCore
 {
     public static string GetRelativePath(string relativeTo, string path)
     {
@@ -103,6 +103,7 @@ public static class PathNetCore
 #if NETFRAMEWORK
 internal static class PathInternalNetCore
 {
+    internal static readonly string DirectorySeparatorCharAsString = Path.DirectorySeparatorChar.ToString();
     internal const string ExtendedDevicePathPrefix = @"\\?\";
     internal const string UncExtendedPathPrefix = @"\\?\UNC\";
 
