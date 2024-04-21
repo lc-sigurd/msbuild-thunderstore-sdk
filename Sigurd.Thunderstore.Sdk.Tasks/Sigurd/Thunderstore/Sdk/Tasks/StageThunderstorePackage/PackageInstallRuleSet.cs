@@ -19,26 +19,26 @@ public class PackageInstallRuleSet
     public static PackageInstallRuleSet DefaultBepInExInstallRules = new() {
         Rules = new List<PackageInstallRule> {
             new() {
-                Route = PathNetCore.Join("BepInEx", "plugins"),
+                Route = "BepInEx/plugins",
                 ImplicitFileExtensions = [".dll"],
                 TrackingMethod = TrackingMethod.Subdirectory,
                 IsDefaultLocation = true,
             },
             new() {
-                Route = PathNetCore.Join("BepInEx", "core"),
+                Route = "BepInEx/core",
                 TrackingMethod = TrackingMethod.Subdirectory
             },
             new() {
-                Route = PathNetCore.Join("BepInEx", "patchers"),
+                Route = "BepInEx/patchers",
                 TrackingMethod = TrackingMethod.Subdirectory
             },
             new() {
-                Route = PathNetCore.Join("BepInEx", "monomod"),
+                Route = "BepInEx/monomod",
                 ImplicitFileExtensions = [".mm.dll"],
                 TrackingMethod = TrackingMethod.Subdirectory
             },
             new() {
-                Route = PathNetCore.Join("BepInEx", "config"),
+                Route = "BepInEx/config",
                 TrackingMethod = TrackingMethod.None
             }
         }.AsReadOnly(),
