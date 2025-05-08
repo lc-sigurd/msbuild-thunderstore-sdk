@@ -15,6 +15,7 @@
 !build.sh
 !build.ps1
 !build.cmd
+!makefile
 
 ## Markdowns
 !*.md
