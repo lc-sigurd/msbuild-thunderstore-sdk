@@ -108,6 +108,12 @@ internal static class MyPluginInfo
     </Target>
 
     <Target Name="ThunderstorePublish" DependsOnTargets="SetThunderstorePackageVersionEvent" Condition="$(IsThunderstorePackable)">
-        <Exec Command="dotnet tcli publish --config-path &quot;$(ProjectDir)assets/thunderstore.toml.user&quot; --file $(ThunderstoreOutDir)*-$(Version).zip"/>
+        <PropertyGroup>
+            <ThunderstoreAuthToken Condition="'$(ThunderstoreAuthToken)' == ''">$(TCLI_AUTH_TOKEN)</ThunderstoreAuthToken>
+        </PropertyGroup>
+        <Exec
+            Command="dotnet tcli publish --config-path &quot;$(ProjectDir)assets/thunderstore.toml.user&quot; --file $(ThunderstoreOutDir)*-$(Version).zip"
+            EnvironmentVariables="TCLI_AUTH_TOKEN=$(ThunderstoreAuthToken)"
+        />
     </Target>
 </Project>
