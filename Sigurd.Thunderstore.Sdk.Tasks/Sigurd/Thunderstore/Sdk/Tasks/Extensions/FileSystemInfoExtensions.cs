@@ -17,4 +17,10 @@ public static class FileSystemInfoExtensions
 
     public static string GetFullNameRelativeTo(this FileSystemInfo info, string dir)
         => PathNetCore.GetRelativePath(dir, info.FullName);
+
+    public static DirectoryInfo GetSubdirectory(this DirectoryInfo dir, string name)
+        => new(PathNetCore.Join(dir.FullName, name));
+
+    public static FileInfo GetFile(this DirectoryInfo dir, string name)
+        => new(PathNetCore.Join(dir.FullName, name));
 }
