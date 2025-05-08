@@ -7,6 +7,17 @@ on:
   # Trigger the workflow on any pull request
   pull_request:
 
+  # Trigger the workflow when called by another workflow
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
     name: Build
@@ -15,6 +26,7 @@ jobs:
       - name: Fetch Sources
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.ref || null }}
           fetch-depth: 0
           filter: tree:0
           submodules: recursive
@@ -22,20 +34,16 @@ jobs:
       - name: Setup .NET environment
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.100"
+          dotnet-version: "9"
 
       - name: Restore project
         run: |
           dotnet restore
           dotnet tool restore
 
-      - name: Build MSBuild tasks
+      - name: Build & Pack SDK
         run: |
-          dotnet build -c ReleaseTasks
-
-      - name: Pack SDK
-        run: |
-          dotnet pack -c ReleaseSdk
+          make release
 
       - name: Upload nupkg artifacts
         uses: actions/upload-artifact@v4

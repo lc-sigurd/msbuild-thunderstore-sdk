@@ -4,42 +4,15 @@ on:
   release:
     types: [prereleased, released]
 
+defaults:
+  run:
+    shell: bash
+
 jobs:
   build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Fetch Sources
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name }}
-          fetch-depth: 0
-          filter: tree:0
-          submodules: recursive
-
-      - name: Setup .NET environment
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: "8.0.100"
-
-      - name: Restore project
-        run: |
-          dotnet restore
-          dotnet tool restore
-
-      - name: Build MSBuild tasks
-        run: |
-          dotnet build -c ReleaseTasks
-
-      - name: Pack SDK
-        run: |
-          dotnet pack -c ReleaseSdk
-
-      - name: Upload nupkg artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: nupkg-build
-          path: ./*/bin/ReleaseSdk/*.nupkg
+    uses: './.github/workflows/build.yml'
+    with:
+      ref: ${{ github.event.release.tag_name }}
 
   upload-release-artifacts:
     name: Upload Release Artifacts
@@ -73,7 +46,7 @@ jobs:
       - name: Setup .NET environment
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.100"
+          dotnet-version: "9"
 
       - name: Publish to NuGet.org
         run: |
