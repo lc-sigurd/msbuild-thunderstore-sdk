@@ -8,12 +8,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Compression;
 using System.Text.Json.Nodes;
+using Sigurd.Thunderstore.Sdk.Tasks.Extensions;
 
 namespace Sigurd.Thunderstore.Sdk.Tasks.StageThunderstorePackage;
 
 public class ThunderstorePackageArchive
 {
-    static readonly PackageInstallRuleSet Rules = PackageInstallRuleSet.DefaultBepInExInstallRules;
+    static readonly PackageInstallRuleSet RuleSet = PackageInstallRuleSet.DefaultBepInExInstallRules;
 
     public FileInfo ArchivePath { get; }
 
@@ -71,7 +72,16 @@ public class ThunderstorePackageArchive
         Serilog.Log.Debug("Now staging {Package} to {Profile}", this, profilePath);
         EnsureValidArchive();
 
-        DirectoryInfo defaultLocation = profilePath.CreateSubdirectory(Rules.DefaultLocationRule.GetEffectiveRoute(this));
+        foreach (var rule in RuleSet.Rules) {
+            if (rule.TrackingMethod is not PackageInstallRuleSet.TrackingMethod.Subdirectory) continue;
+            DirectoryInfo location = profilePath.GetSubdirectory(rule.GetEffectiveRoute(this));
+            try {
+                location.Delete(recursive: true);
+            }
+            catch (DirectoryNotFoundException) { }
+        }
+
+        DirectoryInfo defaultLocation = profilePath.CreateSubdirectory(RuleSet.DefaultLocationRule.GetEffectiveRoute(this));
         using var archiveHandle = ZipFile.OpenRead(ArchivePath.FullName);
 
         Serilog.Log.Verbose("Extracting package");
@@ -91,7 +101,7 @@ public class ThunderstorePackageArchive
 
         bool TryMatchAndApplyRouteRule(ZipArchiveEntry entry)
         {
-            var ruleMatch = Rules.MatchRouteRule(entry);
+            var ruleMatch = RuleSet.MatchRouteRule(entry);
             if (ruleMatch is null) return false;
 
             Serilog.Log.Verbose("{Entry} matched rule by path: {Rule}", entry, ruleMatch);
@@ -105,7 +115,7 @@ public class ThunderstorePackageArchive
 
         bool TryMatchAndApplyImplicitRule(ZipArchiveEntry entry)
         {
-            var ruleMatch = Rules.MatchImplicitRule(entry);
+            var ruleMatch = RuleSet.MatchImplicitRule(entry);
             if (ruleMatch is null) return false;
 
             Serilog.Log.Verbose("{Entry} matched rule by file extension: {Rule}", entry, ruleMatch);
